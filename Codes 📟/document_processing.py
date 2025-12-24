@@ -1,0 +1,1562 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "id": "ijGzTHJJUCPY"
+   },
+   "outputs": [],
+   "source": [
+    "# Copyright 2024 Google LLC\n",
+    "#\n",
+    "# Licensed under the Apache License, Version 2.0 (the \"License\");\n",
+    "# you may not use this file except in compliance with the License.\n",
+    "# You may obtain a copy of the License at\n",
+    "#\n",
+    "#     https://www.apache.org/licenses/LICENSE-2.0\n",
+    "#\n",
+    "# Unless required by applicable law or agreed to in writing, software\n",
+    "# distributed under the License is distributed on an \"AS IS\" BASIS,\n",
+    "# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n",
+    "# See the License for the specific language governing permissions and\n",
+    "# limitations under the License."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "VEqbX8OhE8y9"
+   },
+   "source": [
+    "# Document Processing with Gemini\n",
+    "\n",
+    "<table align=\"left\">\n",
+    "  <td style=\"text-align: center\">\n",
+    "    <a href=\"https://colab.research.google.com/github/GoogleCloudPlatform/generative-ai/blob/main/gemini/use-cases/document-processing/document_processing.ipynb\">\n",
+    "      <img src=\"https://cloud.google.com/ml-engine/images/colab-logo-32px.png\" alt=\"Google Colaboratory logo\"><br> Run in Colab\n",
+    "    </a>\n",
+    "  </td>\n",
+    "  <td style=\"text-align: center\">\n",
+    "    <a href=\"https://console.cloud.google.com/vertex-ai/colab/import/https:%2F%2Fraw.githubusercontent.com%2FGoogleCloudPlatform%2Fgenerative-ai%2Fmain%2Fgemini%2Fuse-cases%2Fdocument-processing%2Fdocument_processing.ipynb\">\n",
+    "      <img width=\"32px\" src=\"https://lh3.googleusercontent.com/JmcxdQi-qOpctIvWKgPtrzZdJJK-J3sWE1RsfjZNwshCFgE_9fULcNpuXYTilIR2hjwN\" alt=\"Google Cloud Colab Enterprise logo\"><br> Run in Colab Enterprise\n",
+    "    </a>\n",
+    "  </td>       \n",
+    "  <td style=\"text-align: center\">\n",
+    "    <a href=\"https://github.com/GoogleCloudPlatform/generative-ai/blob/main/gemini/use-cases/document-processing/document_processing.ipynb\">\n",
+    "      <img src=\"https://cloud.google.com/ml-engine/images/github-logo-32px.png\" alt=\"GitHub logo\"><br> View on GitHub\n",
+    "    </a>\n",
+    "  </td>\n",
+    "  <td style=\"text-align: center\">\n",
+    "    <a href=\"https://console.cloud.google.com/vertex-ai/workbench/deploy-notebook?download_url=https://raw.githubusercontent.com/GoogleCloudPlatform/generative-ai/main/gemini/use-cases/document-processing/document_processing.ipynb\">\n",
+    "      <img src=\"https://lh3.googleusercontent.com/UiNooY4LUgW_oTvpsNhPpQzsstV5W8F7rYgxgGBD85cWJoLmrOzhVs_ksK_vgx40SHs7jCqkTkCk=e14-rj-sc0xffffff-h130-w32\" alt=\"Vertex AI logo\"><br> Open in Vertex AI Workbench\n",
+    "    </a>\n",
+    "  </td>\n",
+    "  <td style=\"text-align: center\">\n",
+    "    <a href=\"https://goo.gle/4jhBze9\">\n",
+    "      <img width=\"32px\" src=\"https://cdn.qwiklabs.com/assets/gcp_cloud-e3a77215f0b8bfa9b3f611c0d2208c7e8708ed31.svg\" alt=\"Google Cloud logo\"><br> Open in  Cloud Skills Boost\n",
+    "    </a>\n",
+    "  </td>\n",
+    "</table>\n",
+    "\n",
+    "<div style=\"clear: both;\"></div>\n",
+    "\n",
+    "<b>Share to:</b>\n",
+    "\n",
+    "<a href=\"https://www.linkedin.com/sharing/share-offsite/?url=https%3A//github.com/GoogleCloudPlatform/generative-ai/blob/main/gemini/use-cases/document-processing/document_processing.ipynb\" target=\"_blank\">\n",
+    "  <img width=\"20px\" src=\"https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg\" alt=\"LinkedIn logo\">\n",
+    "</a>\n",
+    "\n",
+    "<a href=\"https://bsky.app/intent/compose?text=https%3A//github.com/GoogleCloudPlatform/generative-ai/blob/main/gemini/use-cases/document-processing/document_processing.ipynb\" target=\"_blank\">\n",
+    "  <img width=\"20px\" src=\"https://upload.wikimedia.org/wikipedia/commons/7/7a/Bluesky_Logo.svg\" alt=\"Bluesky logo\">\n",
+    "</a>\n",
+    "\n",
+    "<a href=\"https://twitter.com/intent/tweet?url=https%3A//github.com/GoogleCloudPlatform/generative-ai/blob/main/gemini/use-cases/document-processing/document_processing.ipynb\" target=\"_blank\">\n",
+    "  <img width=\"20px\" src=\"https://upload.wikimedia.org/wikipedia/commons/5/5a/X_icon_2.svg\" alt=\"X logo\">\n",
+    "</a>\n",
+    "\n",
+    "<a href=\"https://reddit.com/submit?url=https%3A//github.com/GoogleCloudPlatform/generative-ai/blob/main/gemini/use-cases/document-processing/document_processing.ipynb\" target=\"_blank\">\n",
+    "  <img width=\"20px\" src=\"https://redditinc.com/hubfs/Reddit%20Inc/Brand/Reddit_Logo.png\" alt=\"Reddit logo\">\n",
+    "</a>\n",
+    "\n",
+    "<a href=\"https://www.facebook.com/sharer/sharer.php?u=https%3A//github.com/GoogleCloudPlatform/generative-ai/blob/main/gemini/use-cases/document-processing/document_processing.ipynb\" target=\"_blank\">\n",
+    "  <img width=\"20px\" src=\"https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg\" alt=\"Facebook logo\">\n",
+    "</a>            \n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "fb49ff2efb96"
+   },
+   "source": [
+    "| Authors |\n",
+    "| --- |\n",
+    "| [Holt Skinner](https://github.com/holtskinner) |\n",
+    "| [Renato Leite](https://github.com/leiterenato) |"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "CkHPv2myT2cx"
+   },
+   "source": [
+    "## Overview\n",
+    "\n",
+    "In today's information-driven world, the volume of digital documents generated daily is staggering. From emails and reports to legal contracts and scientific papers, businesses and individuals alike are inundated with vast amounts of textual data. Extracting meaningful insights from these documents efficiently and accurately has become a paramount challenge.\n",
+    "\n",
+    "Document processing involves a range of tasks, including text extraction, classification, summarization, and translation, among others. Traditional methods often rely on rule-based algorithms or statistical models, which may struggle with the nuances and complexities of natural language.\n",
+    "\n",
+    "Generative AI offers a promising alternative to understand, generate, and manipulate text using natural language prompting. Gemini on Vertex AI allows these models to be used in a scalable manner through:\n",
+    "\n",
+    "- [Vertex AI Studio](https://cloud.google.com/generative-ai-studio) in the Cloud Console\n",
+    "- [Vertex AI REST API](https://cloud.google.com/vertex-ai/docs/reference/rest)\n",
+    "- [Google Gen AI SDK for Python](https://cloud.google.com/vertex-ai/generative-ai/docs/sdks/overview)\n",
+    "\n",
+    "For more information, see the [Generative AI on Vertex AI](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview) documentation.\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "DrkcqHrrwMAo"
+   },
+   "source": [
+    "### Objectives\n",
+    "\n",
+    "In this tutorial, you will learn how to use the Gemini API in Vertex AI with the Google Gen AI SDK for Python to process PDF documents.\n",
+    "\n",
+    "You will complete the following tasks:\n",
+    "\n",
+    "- Install the SDK\n",
+    "- Use the Gemini 2.5 Flash model to:\n",
+    "  - Extract structured entities from an unstructured document\n",
+    "  - Classify document types\n",
+    "  - Combine classification and entity extraction into a single workflow\n",
+    "  - Answer questions from documents\n",
+    "  - Summarize documents\n",
+    "  - Extract Table Data as HTML\n",
+    "  - Translate documents\n",
+    "  - Compare and contrast similar documents\n",
+    "  - Identify and extract relevant pages from a PDF"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "C9nEPojogw-g"
+   },
+   "source": [
+    "### Costs\n",
+    "\n",
+    "This tutorial uses billable components of Google Cloud:\n",
+    "\n",
+    "- Vertex AI\n",
+    "\n",
+    "Learn about [Vertex AI pricing](https://cloud.google.com/vertex-ai/pricing) and use the [Pricing Calculator](https://cloud.google.com/products/calculator/) to generate a cost estimate based on your projected usage.\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "r11Gu7qNgx1p"
+   },
+   "source": [
+    "## Getting Started\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "No17Cw5hgx12"
+   },
+   "source": [
+    "### Install Google Gen AI SDK for Python\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "id": "tFy3H3aPgx12"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\u001b[33m  WARNING: Failed to remove contents in a temporary directory '/opt/conda/lib/python3.10/site-packages/google/~uth'.\n",
+      "  You can safely remove it manually.\u001b[0m\u001b[33m\n",
+      "\u001b[0m\u001b[33m  WARNING: Failed to remove contents in a temporary directory '/opt/conda/lib/python3.10/site-packages/google/~auth2'.\n",
+      "  You can safely remove it manually.\u001b[0m\u001b[33m\n",
+      "\u001b[0mNote: you may need to restart the kernel to use updated packages.\n"
+     ]
+    }
+   ],
+   "source": [
+    "%pip install --upgrade --quiet google-genai pypdf"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Restart current runtime\n",
+    "\n",
+    "To use the newly installed packages in this Jupyter runtime, you must restart the runtime. You can do this by running the cell below, which will restart the current kernel."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'status': 'ok', 'restart': True}"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Restart kernel after installs so that your environment can access the new packages\n",
+    "import IPython\n",
+    "\n",
+    "app = IPython.Application.instance()\n",
+    "app.kernel.do_shutdown(True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "DF4l8DTdWgPY"
+   },
+   "source": [
+    "### Set Google Cloud project information and create client\n",
+    "\n",
+    "To get started using Vertex AI, you must have an existing Google Cloud project and [enable the Vertex AI API](https://console.cloud.google.com/flows/enableapi?apiid=aiplatform.googleapis.com).\n",
+    "\n",
+    "Learn more about [setting up a project and a development environment](https://cloud.google.com/vertex-ai/docs/start/cloud-environment)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "id": "Nqwi-5ufWp_B"
+   },
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "from google import genai\n",
+    "\n",
+    "PROJECT_ID = \"qwiklabs-gcp-02-89db1e616e00\"  # @param {type:\"string\"}\n",
+    "LOCATION = os.environ.get(\"GOOGLE_CLOUD_REGION\", \"global\")\n",
+    "\n",
+    "client = genai.Client(vertexai=True, project=PROJECT_ID, location=LOCATION)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "jXHfaVS66_01"
+   },
+   "source": [
+    "### Import libraries\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "id": "lslYAvw37JGQ"
+   },
+   "outputs": [],
+   "source": [
+    "from datetime import date\n",
+    "from enum import Enum\n",
+    "import json\n",
+    "\n",
+    "from IPython.display import Markdown, display\n",
+    "from google.genai.types import GenerateContentConfig, Part\n",
+    "from pydantic import BaseModel, Field\n",
+    "import pypdf\n",
+    "\n",
+    "PDF_MIME_TYPE = \"application/pdf\"\n",
+    "JSON_MIME_TYPE = \"application/json\"\n",
+    "ENUM_MIME_TYPE = \"text/x.enum\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "FTMywdzUORIA"
+   },
+   "source": [
+    "### Load the Gemini 2.5 Flash model\n",
+    "\n",
+    "Gemini 2.5 Flash (`gemini-2.5-flash`) is a multimodal model that supports multimodal prompts. You can include text, image(s), and video in your prompt requests and get text or code responses.\n",
+    "\n",
+    "Learn more about all [Gemini models on Vertex AI](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/models#gemini-models)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "id": "e771399cfc79"
+   },
+   "outputs": [],
+   "source": [
+    "MODEL_ID = \"gemini-2.5-flash\"  # @param {type: \"string\"}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "Wy75sLb-yjNn"
+   },
+   "source": [
+    "## Entity Extraction\n",
+    "\n",
+    "[Named Entity Extraction](https://en.wikipedia.org/wiki/Named-entity_recognition) is a technique of Natural Language Processing to identify specific fields and values from unstructured text. For example, you can find key-value pairs from a filled out form, or get all of the important data from an invoice categorized by the type."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "7a75f6e4bd54"
+   },
+   "source": [
+    "### Extract entities from an invoice\n",
+    "\n",
+    "In this example, you will use a sample invoice and get all of the information in a structured format.\n",
+    "\n",
+    "This is the prompt to be sent to Gemini along with the PDF document. Feel free to edit this for your specific use case."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "id": "0841cb312d46"
+   },
+   "outputs": [],
+   "source": [
+    "entity_extraction_system_instruction = \"\"\"You are a document entity extraction specialist. Given a document, your task is to extract the text value of the entities provided in the schema.\n",
+    "- The values must only include text found in the document\n",
+    "- Do not normalize any entity values.\n",
+    "\"\"\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "802016a08f79"
+   },
+   "source": [
+    "We will use [Controlled generation](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/control-generated-output) to tell the model which fields need to be extracted.\n",
+    "\n",
+    "The response schema is specified in the `response_schema` parameter in `config`, and the model output will strictly follow that schema.\n",
+    "\n",
+    "You can provide the schemas as [Pydantic](https://docs.pydantic.dev/) models or a [JSON](https://www.json.org/json-en.html) string and the model will respond as JSON or an [Enum](https://docs.python.org/3/library/enum.html) depending on the value set in `response_mime_type`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "id": "608a06507932"
+   },
+   "outputs": [],
+   "source": [
+    "class Address(BaseModel):\n",
+    "    street: str | None = Field(None, json_schema_extra={\"example\": \"123 Main St\"})\n",
+    "    city: str | None = Field(None, json_schema_extra={\"example\": \"Springfield\"})\n",
+    "    state: str | None = Field(None, json_schema_extra={\"example\": \"IL\"})\n",
+    "    postal_code: str | None = Field(None, json_schema_extra={\"example\": \"62704\"})\n",
+    "    country: str | None = Field(None, json_schema_extra={\"example\": \"USA\"})\n",
+    "\n",
+    "\n",
+    "class LineItem(BaseModel):\n",
+    "    amount: float = Field(..., json_schema_extra={\"example\": 100.00})\n",
+    "    description: str | None = Field(None, json_schema_extra={\"example\": \"Laptop\"})\n",
+    "    product_code: str | None = Field(None, json_schema_extra={\"example\": \"LPT-001\"})\n",
+    "    quantity: int = Field(..., json_schema_extra={\"example\": 2})\n",
+    "    unit: str | None = Field(None, json_schema_extra={\"example\": \"pcs\"})\n",
+    "    unit_price: float = Field(..., json_schema_extra={\"example\": 50.00})\n",
+    "\n",
+    "\n",
+    "class VAT(BaseModel):\n",
+    "    amount: float = Field(..., json_schema_extra={\"example\": 20.00})\n",
+    "    category_code: str | None = Field(None, json_schema_extra={\"example\": \"A\"})\n",
+    "    tax_amount: float | None = Field(None, json_schema_extra={\"example\": 5.00})\n",
+    "    tax_rate: float | None = Field(\n",
+    "        None, json_schema_extra={\"example\": 10.0}\n",
+    "    )  # Percentage as a float (e.g., 10 for 10%)\n",
+    "    total_amount: float = Field(..., json_schema_extra={\"example\": 200.00})\n",
+    "\n",
+    "\n",
+    "class Party(BaseModel):\n",
+    "    name: str = Field(..., json_schema_extra={\"example\": \"Google\"})\n",
+    "    street: str | None = Field(None, json_schema_extra={\"example\": \"456 Business Rd\"})\n",
+    "    city: str | None = Field(None, json_schema_extra={\"example\": \"Metropolis\"})\n",
+    "    state: str | None = Field(None, json_schema_extra={\"example\": \"NY\"})\n",
+    "    postal_code: str | None = Field(None, json_schema_extra={\"example\": \"10001\"})\n",
+    "    country: str | None = Field(None, json_schema_extra={\"example\": \"USA\"})\n",
+    "    email: str | None = Field(None, json_schema_extra={\"example\": \"contact@google.com\"})\n",
+    "    phone: str | None = Field(None, json_schema_extra={\"example\": \"+1-555-1234\"})\n",
+    "    website: str | None = Field(None, json_schema_extra={\"example\": \"https://google.com\"})\n",
+    "    tax_id: str | None = Field(None, json_schema_extra={\"example\": \"123456789\"})\n",
+    "    registration: str | None = Field(None, json_schema_extra={\"example\": \"Reg-98765\"})\n",
+    "    iban: str | None = Field(None, json_schema_extra={\"example\": \"US1234567890123456789\"})\n",
+    "    payment_ref: str | None = Field(None, json_schema_extra={\"example\": \"INV-2024-001\"})\n",
+    "\n",
+    "\n",
+    "class Invoice(BaseModel):\n",
+    "    invoice_id: str = Field(..., json_schema_extra={\"example\": \"INV-2024-001\"})\n",
+    "    invoice_date: str = Field(..., json_schema_extra={\"example\": \"2024-02-03\"})\n",
+    "    supplier: Party\n",
+    "    receiver: Party\n",
+    "    line_items: list[LineItem]\n",
+    "    vat: list[VAT]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "91dcaf17c2ce"
+   },
+   "source": [
+    "For this example, we will download a PDF document to local storage and send the file bytes to the API for processing.\n",
+    "\n",
+    "You can view the document [here](https://storage.googleapis.com/cloud-samples-data/generative-ai/pdf/invoice.pdf)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "id": "42b044f767e3"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Copying gs://cloud-samples-data/generative-ai/pdf/invoice.pdf...\n",
+      "/ [1 files][340.0 KiB/340.0 KiB]                                                \n",
+      "Operation completed over 1 objects/340.0 KiB.                                    \n"
+     ]
+    }
+   ],
+   "source": [
+    "# Download a PDF from Google Cloud Storage\n",
+    "! gsutil cp \"gs://cloud-samples-data/generative-ai/pdf/invoice.pdf\" ./invoice.pdf"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "id": "KzqjpEiryjNo"
+   },
+   "outputs": [],
+   "source": [
+    "# Load file bytes\n",
+    "with open(\"invoice.pdf\", \"rb\") as f:\n",
+    "    file_bytes = f.read()\n",
+    "\n",
+    "# Send to Gemini API\n",
+    "response = client.models.generate_content(\n",
+    "    model=MODEL_ID,\n",
+    "    contents=[\n",
+    "        \"The following document is an invoice.\",\n",
+    "        Part.from_bytes(data=file_bytes, mime_type=PDF_MIME_TYPE),\n",
+    "    ],\n",
+    "    config=GenerateContentConfig(\n",
+    "        system_instruction=entity_extraction_system_instruction,\n",
+    "        temperature=0,\n",
+    "        response_schema=Invoice,\n",
+    "        response_mime_type=JSON_MIME_TYPE,\n",
+    "    ),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "131e8044cf70"
+   },
+   "source": [
+    "We can load the extracted data as an object using the `response.parsed` field."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "id": "63f7f16fabc7"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "-------Extracted Entities--------\n",
+      "invoice_id='3222' invoice_date='02/23/2021' supplier=Party(name='AMNOSH SUPPLIERS', street='9291 Proin Road', city='Lake Charles', state='ME', postal_code='11292', country=None, email='sales@amnoshsuppliers.com', phone='123-456-7890', website='www.amnoshsuppliers.com', tax_id=None, registration=None, iban=None, payment_ref=None) receiver=Party(name='Martin Colby', street='45 Lightning Road,', city='Arizona', state='AZ', postal_code='88776', country=None, email='proprietor@abcxyz.com', phone='321-321-1234', website=None, tax_id=None, registration=None, iban=None, payment_ref=None) line_items=[LineItem(amount=490.12, description='Drag Series Transmission Build - A WD DSM', product_code=None, quantity=1, unit=None, unit_price=490.12), LineItem(amount=220.15, description='Drive Shaft Automatic Right', product_code=None, quantity=7, unit=None, unit_price=31.45), LineItem(amount=549.1, description='Multigrade Synthetic Technology Bench', product_code=None, quantity=1, unit=None, unit_price=549.1), LineItem(amount=1187.79, description='6689 Transit Stan', product_code=None, quantity=1, unit=None, unit_price=1187.79), LineItem(amount=883.12, description='HMT Vertical Milling Machine', product_code=None, quantity=1, unit=None, unit_price=883.12), LineItem(amount=87.54, description='Optional: HMT Machine', product_code=None, quantity=1, unit=None, unit_price=87.54)] vat=[VAT(amount=3417.82, category_code=None, tax_amount=341.78, tax_rate=10.0, total_amount=3759.6)]\n"
+     ]
+    }
+   ],
+   "source": [
+    "invoice_data = response.parsed\n",
+    "print(\"\\n-------Extracted Entities--------\")\n",
+    "print(invoice_data)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "c82b9d10e9d1"
+   },
+   "source": [
+    "Or the response can then be parsed as JSON into a Python dictionary for use in other applications."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "id": "ce9731cb0a84"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{'invoice_id': '3222', 'invoice_date': '02/23/2021', 'supplier': {'name': 'AMNOSH SUPPLIERS', 'street': '9291 Proin Road', 'city': 'Lake Charles', 'state': 'ME', 'postal_code': '11292', 'country': None, 'email': 'sales@amnoshsuppliers.com', 'phone': '123-456-7890', 'website': 'www.amnoshsuppliers.com', 'tax_id': None, 'registration': None, 'iban': None, 'payment_ref': None}, 'receiver': {'name': 'Martin Colby', 'street': '45 Lightning Road,', 'city': 'Arizona', 'state': 'AZ', 'postal_code': '88776', 'country': None, 'email': 'proprietor@abcxyz.com', 'phone': '321-321-1234', 'website': None, 'tax_id': None, 'registration': None, 'iban': None, 'payment_ref': None}, 'line_items': [{'amount': 490.12, 'description': 'Drag Series Transmission Build - A WD DSM', 'product_code': None, 'quantity': 1, 'unit': None, 'unit_price': 490.12}, {'amount': 220.15, 'description': 'Drive Shaft Automatic Right', 'product_code': None, 'quantity': 7, 'unit': None, 'unit_price': 31.45}, {'amount': 549.1, 'description': 'Multigrade Synthetic Technology Bench', 'product_code': None, 'quantity': 1, 'unit': None, 'unit_price': 549.1}, {'amount': 1187.79, 'description': '6689 Transit Stan', 'product_code': None, 'quantity': 1, 'unit': None, 'unit_price': 1187.79}, {'amount': 883.12, 'description': 'HMT Vertical Milling Machine', 'product_code': None, 'quantity': 1, 'unit': None, 'unit_price': 883.12}, {'amount': 87.54, 'description': 'Optional: HMT Machine', 'product_code': None, 'quantity': 1, 'unit': None, 'unit_price': 87.54}], 'vat': [{'amount': 3417.82, 'category_code': None, 'tax_amount': 341.78, 'tax_rate': 10.0, 'total_amount': 3759.6}]}\n"
+     ]
+    }
+   ],
+   "source": [
+    "json_object = json.loads(response.text)\n",
+    "print(json_object)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "c7cdda6aa720"
+   },
+   "source": [
+    "You can see that Gemini extracted all of the relevant fields from the document."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "4dca9fa02c05"
+   },
+   "source": [
+    "### Extract entities from a payslip\n",
+    "\n",
+    "Let's try with another type of document, a payslip or paystub.\n",
+    "\n",
+    "In this example, we will use a document hosted on Google Cloud Storage and process it by passing the URI.\n",
+    "\n",
+    "You can view the document [here](https://storage.googleapis.com/cloud-samples-data/generative-ai/pdf/earnings_statement.pdf)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "id": "3ca20cd3f738"
+   },
+   "outputs": [],
+   "source": [
+    "class Payslip(BaseModel):\n",
+    "    employee_id: str = Field(..., json_schema_extra={\"description\": \"Unique identifier for the employee\"})\n",
+    "    employee_name: str = Field(..., json_schema_extra={\"description\": \"Full name of the employee\"})\n",
+    "    pay_period_start: date = Field(..., json_schema_extra={\"description\": \"Start date of the pay period\"})\n",
+    "    pay_period_end: date = Field(..., json_schema_extra={\"description\": \"End date of the pay period\"})\n",
+    "    gross_income: float = Field(..., json_schema_extra={\"description\": \"Total income before deductions\"})\n",
+    "    federal_tax: float = Field(..., json_schema_extra={\"description\": \"Federal tax deduction amount\"})\n",
+    "    state_tax: float | None = Field(\n",
+    "        0.0, json_schema_extra={\"description\": \"State tax deduction amount, if applicable\"}\n",
+    "    )\n",
+    "    social_security: float = Field(..., json_schema_extra={\"description\": \"Social Security deduction amount\"})\n",
+    "    medicare: float = Field(..., json_schema_extra={\"description\": \"Medicare deduction amount\"})\n",
+    "    other_deductions: float | None = Field(\n",
+    "        0.0, json_schema_extra={\"description\": \"Other deductions (e.g., health insurance, retirement)\"}\n",
+    "    )\n",
+    "    net_income: float = Field(..., json_schema_extra={\"description\": \"Income after all deductions\"})\n",
+    "    payment_date: date = Field(..., json_schema_extra={\"description\": \"Date the payment was issued\"})\n",
+    "    hours_worked: float | None = Field(\n",
+    "        None, json_schema_extra={\"description\": \"Total hours worked in the pay period\"}\n",
+    "    )\n",
+    "    hourly_rate: float | None = Field(\n",
+    "        None, json_schema_extra={\"description\": \"Employee's hourly rate, if applicable\"}\n",
+    "    )"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {
+    "id": "06d34a6f08d9"
+   },
+   "outputs": [],
+   "source": [
+    "response = client.models.generate_content(\n",
+    "    model=MODEL_ID,\n",
+    "    contents=[\n",
+    "        \"The following document is a Payslip.\",\n",
+    "        Part.from_uri(\n",
+    "            file_uri=\"gs://cloud-samples-data/generative-ai/pdf/earnings_statement.pdf\",\n",
+    "            mime_type=PDF_MIME_TYPE,\n",
+    "        ),\n",
+    "    ],\n",
+    "    config=GenerateContentConfig(\n",
+    "        system_instruction=entity_extraction_system_instruction,\n",
+    "        temperature=0,\n",
+    "        response_schema=Payslip,\n",
+    "        response_mime_type=JSON_MIME_TYPE,\n",
+    "    ),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {
+    "id": "230b3ae51289"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "-------Extracted Entities--------\n",
+      "employee_id='123456' employee_name='Janet Doe' pay_period_start=datetime.date(1110, 12, 17) pay_period_end=datetime.date(1212, 12, 17) gross_income=1600.0 federal_tax=179.2 state_tax=80.0 social_security=99.2 medicare=20.8 other_deductions=160.0 net_income=1060.8 payment_date=datetime.date(1215, 12, 17) hours_worked=80.0 hourly_rate=20.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"\\n-------Extracted Entities--------\")\n",
+    "print(response.parsed)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "Uhtahn_jTZKC"
+   },
+   "source": [
+    "## Document Classification\n",
+    "\n",
+    "Document classification is the process for identifying the type of document. For example, invoice, W-2, receipt, etc.\n",
+    "\n",
+    "In this example, you will use a [sample tax form (W-9)](https://storage.googleapis.com/cloud-samples-data/generative-ai/pdf/w9.pdf) and get the specific type of document from a specified `Enum`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {
+    "id": "d797c2bfb490"
+   },
+   "outputs": [],
+   "source": [
+    "classification_prompt = \"\"\"You are a document classification specialist. Given a document, your task is to find which category the document belongs to from the document categories provided in the schema.\"\"\"\n",
+    "\n",
+    "\n",
+    "class DocumentCategory(Enum):\n",
+    "    TAX_1040_2019 = \"1040_2019\"\n",
+    "    TAX_1040_2020 = \"1040_2020\"\n",
+    "    TAX_1099_R = \"1099-r\"\n",
+    "    BANK_STATEMENT = \"bank_statement\"\n",
+    "    CREDIT_CARD_STATEMENT = \"credit_card_statement\"\n",
+    "    EXPENSE = \"expense\"\n",
+    "    TAX_1120S_2019 = \"form_1120S_2019\"\n",
+    "    TAX_1120S_2020 = \"form_1120S_2020\"\n",
+    "    INVESTMENT_RETIREMENT_STATEMENT = \"investment_retirement_statement\"\n",
+    "    INVOICE = \"invoice\"\n",
+    "    PAYSTUB = \"paystub\"\n",
+    "    PROPERTY_INSURANCE = \"property_insurance\"\n",
+    "    PURCHASE_ORDER = \"purchase_order\"\n",
+    "    UTILITY_STATEMENT = \"utility_statement\"\n",
+    "    W2 = \"w2\"\n",
+    "    W9 = \"w9\"\n",
+    "    DRIVER_LICENSE = \"driver_license\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {
+    "id": "7dcab4a008a5"
+   },
+   "outputs": [],
+   "source": [
+    "response = client.models.generate_content(\n",
+    "    model=MODEL_ID,\n",
+    "    contents=[\n",
+    "        \"Classify the following document.\",\n",
+    "        Part.from_uri(\n",
+    "            file_uri=\"https://storage.googleapis.com/cloud-samples-data/generative-ai/pdf/w9.pdf\",\n",
+    "            mime_type=PDF_MIME_TYPE,\n",
+    "        ),\n",
+    "    ],\n",
+    "    config=GenerateContentConfig(\n",
+    "        system_instruction=classification_prompt,\n",
+    "        temperature=0,\n",
+    "        response_schema=DocumentCategory,\n",
+    "        response_mime_type=ENUM_MIME_TYPE,\n",
+    "    ),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {
+    "id": "200922ddac39"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "-------Document Classification--------\n",
+      "w9\n",
+      "DocumentCategory.W9\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"\\n-------Document Classification--------\")\n",
+    "print(response.text)\n",
+    "print(response.parsed)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "d99b968e9faa"
+   },
+   "source": [
+    "You can see that Gemini successfully categorized the document."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "9c41c7273b66"
+   },
+   "source": [
+    "### Chaining Classification and Extraction\n",
+    "\n",
+    "These techniques can also be chained together to extract any number of document types.\n",
+    "\n",
+    "For example, if you have multiple types of documents to process, you can send each document to Gemini with a classification prompt, then based on that output, you can write logic to decide which extraction prompt to use.\n",
+    "\n",
+    "These are the sample documents:\n",
+    "\n",
+    "- [US Driver License](https://storage.googleapis.com/cloud-samples-data/documentai/SampleDocuments/US_DRIVER_LICENSE_PROCESSOR/dl3.pdf)\n",
+    "- [Invoice](https://storage.googleapis.com/cloud-samples-data/documentai/SampleDocuments/INVOICE_PROCESSOR/google_invoice.pdf)\n",
+    "- [Form W-2](https://storage.googleapis.com/cloud-samples-data/documentai/SampleDocuments/FORM_W2_PROCESSOR/2020FormW-2.pdf)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {
+    "id": "69fd5883a812"
+   },
+   "outputs": [],
+   "source": [
+    "class W2Form(BaseModel):\n",
+    "    control_number: str | None = Field(None)\n",
+    "    ein: str = Field(...)\n",
+    "\n",
+    "    employee_first_name: str = Field(...)\n",
+    "    employee_last_name: str = Field(...)\n",
+    "    employee_address_street: str = Field(...)\n",
+    "    employee_address_city: str = Field(...)\n",
+    "    employee_address_state: str = Field(...)\n",
+    "    employee_address_zip: str = Field(...)\n",
+    "\n",
+    "    employer_name: str = Field(...)\n",
+    "    employer_address_street: str = Field(...)\n",
+    "    employer_address_city: str = Field(...)\n",
+    "    employer_address_state: str = Field(...)\n",
+    "    employer_address_zip: str = Field(...)\n",
+    "    employer_state_id_number: str | None = Field(None)\n",
+    "\n",
+    "    wages_tips_other_compensation: float = Field(...)\n",
+    "    federal_income_tax_withheld: float = Field(...)\n",
+    "    social_security_wages: float = Field(...)\n",
+    "    social_security_tax_withheld: float = Field(...)\n",
+    "    medicare_wages_and_tips: float = Field(...)\n",
+    "    medicare_tax_withheld: float = Field(...)\n",
+    "\n",
+    "    state: str | None = Field(None)\n",
+    "    state_wages_tips_etc: float | None = Field(None)\n",
+    "    state_income_tax: float | None = Field(None)\n",
+    "\n",
+    "    box_12_code: str | None = Field(None)\n",
+    "    box_12_value: str | None = Field(None)\n",
+    "\n",
+    "    form_year: int = Field(...)\n",
+    "\n",
+    "\n",
+    "class DriversLicense(BaseModel):\n",
+    "    address: str = Field(\n",
+    "        ..., json_schema_extra={\"title\": \"Address\", \"description\": \"The address of the individual.\"}\n",
+    "    )\n",
+    "    date_of_birth: date = Field(\n",
+    "        ..., json_schema_extra={\"title\": \"Date of Birth\", \"description\": \"The birthdate of the individual.\"}\n",
+    "    )\n",
+    "    document_id: str = Field(\n",
+    "        ...,\n",
+    "        json_schema_extra={\"title\": \"Document ID\", \"description\": \"The unique document ID for the driver's license.\"},\n",
+    "    )\n",
+    "    expiration_date: date = Field(\n",
+    "        ...,\n",
+    "        json_schema_extra={\"title\": \"Expiration Date\", \"description\": \"The expiration date of the driver's license.\"},\n",
+    "    )\n",
+    "    family_name: str = Field(\n",
+    "        ...,\n",
+    "        json_schema_extra={\"title\": \"Family Name\", \"description\": \"The family name (last name) of the individual.\"},\n",
+    "    )\n",
+    "    given_names: str = Field(\n",
+    "        ...,\n",
+    "        json_schema_extra={\"title\": \"Given Names\", \"description\": \"The given names (first and middle names) of the individual.\"},\n",
+    "    )\n",
+    "    issue_date: date = Field(\n",
+    "        ..., json_schema_extra={\"title\": \"Issue Date\", \"description\": \"The issue date of the driver's license.\"}\n",
+    "    )\n",
+    "\n",
+    "# Map classification types to schemas\n",
+    "classification_to_schema = {\n",
+    "    DocumentCategory.INVOICE: Invoice,\n",
+    "    DocumentCategory.W2: W2Form,\n",
+    "    DocumentCategory.DRIVER_LICENSE: DriversLicense,\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {
+    "id": "2c806b4d757e"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "File: gs://cloud-samples-data/documentai/SampleDocuments/US_DRIVER_LICENSE_PROCESSOR/dl3.pdf\n",
+      "\n",
+      "Document Classification: driver_license\n",
+      "\n",
+      "-------Extracted Entities--------\n",
+      "address='123 MAIN STREET HELENA, MT 59601' date_of_birth=datetime.date(1968, 8, 4) document_id='0812319684104' expiration_date=datetime.date(2023, 8, 4) family_name='SAMPLE' given_names='BRENDA LYNN' issue_date=datetime.date(2015, 2, 15)\n",
+      "\n",
+      "File: gs://cloud-samples-data/documentai/SampleDocuments/INVOICE_PROCESSOR/google_invoice.pdf\n",
+      "\n",
+      "Document Classification: invoice\n",
+      "\n",
+      "-------Extracted Entities--------\n",
+      "invoice_id='23413561D' invoice_date='Sep 24, 2019' supplier=Party(name='Google', street=None, city=None, state=None, postal_code=None, country=None, email=None, phone=None, website=None, tax_id=None, registration=None, iban=None, payment_ref=None) receiver=Party(name='Jane Smith', street='1600 Amphitheatre Pkway', city='Mountain View', state='CA', postal_code='94043', country=None, email=None, phone=None, website=None, tax_id=None, registration=None, iban=None, payment_ref=None) line_items=[LineItem(amount=119.88, description='12 ft HDMI cable', product_code=None, quantity=12, unit=None, unit_price=9.99), LineItem(amount=4799.88, description='27\" Computer Monitor', product_code=None, quantity=12, unit=None, unit_price=399.99), LineItem(amount=719.88, description='Ergonomic Keyboard', product_code=None, quantity=12, unit=None, unit_price=59.99), LineItem(amount=239.88, description='Optical mouse', product_code=None, quantity=12, unit=None, unit_price=19.99), LineItem(amount=15599.88, description='Laptop', product_code=None, quantity=12, unit=None, unit_price=1299.99), LineItem(amount=899.99, description='Misc processing fees', product_code=None, quantity=1, unit=None, unit_price=899.99)] vat=[VAT(amount=17679.7, category_code=None, tax_amount=1767.97, tax_rate=0.1, total_amount=19447.67)]\n",
+      "\n",
+      "File: gs://cloud-samples-data/documentai/SampleDocuments/FORM_W2_PROCESSOR/2020FormW-2.pdf\n",
+      "\n",
+      "Document Classification: w2\n",
+      "\n",
+      "-------Extracted Entities--------\n",
+      "control_number='GN1851' ein='63-0065650' employee_first_name='Anastasia' employee_last_name='Hodges' employee_address_street='200 2nd Street NE' employee_address_city='Waseca' employee_address_state='MN' employee_address_zip='56093' employer_name='NORTH 312' employer_address_street='151 N Market Street' employer_address_city='Wooster' employer_address_state='OH' employer_address_zip='44691' employer_state_id_number='00-0-0960' wages_tips_other_compensation=23677.7 federal_income_tax_withheld=2841.32 social_security_wages=24410.0 social_security_tax_withheld=1513.42 medicare_wages_and_tips=24410.0 medicare_tax_withheld=353.95 state='MN' state_wages_tips_etc=24410.0 state_income_tax=244.1 box_12_code='C' box_12_value='2,929.20' form_year=2020\n"
+     ]
+    }
+   ],
+   "source": [
+    "gcs_uris = [\n",
+    "    \"gs://cloud-samples-data/documentai/SampleDocuments/US_DRIVER_LICENSE_PROCESSOR/dl3.pdf\",\n",
+    "    \"gs://cloud-samples-data/documentai/SampleDocuments/INVOICE_PROCESSOR/google_invoice.pdf\",\n",
+    "    \"gs://cloud-samples-data/documentai/SampleDocuments/FORM_W2_PROCESSOR/2020FormW-2.pdf\",\n",
+    "]\n",
+    "\n",
+    "for gcs_uri in gcs_uris:\n",
+    "    print(f\"\\nFile: {gcs_uri}\\n\")\n",
+    "\n",
+    "    # Send to Gemini with Classification Prompt\n",
+    "    classification_response = client.models.generate_content(\n",
+    "        model=MODEL_ID,\n",
+    "        contents=[\n",
+    "            \"Classify the following document.\",\n",
+    "            Part.from_uri(file_uri=gcs_uri, mime_type=PDF_MIME_TYPE),\n",
+    "        ],\n",
+    "        config=GenerateContentConfig(\n",
+    "            system_instruction=classification_prompt,\n",
+    "            temperature=0,\n",
+    "            response_schema=DocumentCategory,\n",
+    "            response_mime_type=ENUM_MIME_TYPE,\n",
+    "        ),\n",
+    "    )\n",
+    "\n",
+    "    print(f\"Document Classification: {classification_response.text}\")\n",
+    "\n",
+    "    # Get Extraction schema based on Classification\n",
+    "    extraction_schema = classification_to_schema.get(classification_response.parsed)\n",
+    "\n",
+    "    if not extraction_schema:\n",
+    "        print(f\"Document does not belong to a specified class. Skipping extraction.\")\n",
+    "        continue\n",
+    "\n",
+    "    # Send to Gemini with Extraction Prompt\n",
+    "    extraction_response = client.models.generate_content(\n",
+    "        model=MODEL_ID,\n",
+    "        contents=[\n",
+    "            f\"Extract the entities from the following {classification_response.text} document.\",\n",
+    "            Part.from_uri(file_uri=gcs_uri, mime_type=PDF_MIME_TYPE),\n",
+    "        ],\n",
+    "        config=GenerateContentConfig(\n",
+    "            system_instruction=classification_prompt,\n",
+    "            temperature=0,\n",
+    "            response_schema=extraction_schema,\n",
+    "            response_mime_type=JSON_MIME_TYPE,\n",
+    "        ),\n",
+    "    )\n",
+    "\n",
+    "    print(\"\\n-------Extracted Entities--------\")\n",
+    "    print(extraction_response.parsed)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "322abdb6d63d"
+   },
+   "source": [
+    "## Document Question Answering\n",
+    "\n",
+    "Gemini can be used to answer questions about a document.\n",
+    "\n",
+    "This example answers a question about the Transformer model paper [\"Attention is all you need\"](https://arxiv.org/pdf/1706.03762), we will be loading the PDF file directly from the source on [arXiv](https://arxiv.org)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {
+    "id": "f47a8b63ce13"
+   },
+   "outputs": [],
+   "source": [
+    "qa_system_instruction = \"You are a question answering specialist. Given a question and a context, your task is to provide the answer to the question based on the context provided. Give the answer first, followed by an explanation.\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "id": "636f158c24fb"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Answer: The attention mechanism is a function that maps a query and a set of key-value pairs to an output. In this process, the query, keys, values, and the resulting output are all vectors. The output is calculated as a weighted sum of the values, where the weight assigned to each value is determined by a compatibility function between the query and its corresponding key.\n",
+      "\n",
+      "**Explanation:**\n",
+      "Attention mechanisms are a crucial component in sequence modeling and transduction models, enabling them to model dependencies regardless of the distance between elements in the input or output sequences. While often used with recurrent networks, the Transformer model, introduced in this paper, relies solely on attention mechanisms, dispensing with recurrence and convolutions entirely.\n",
+      "\n",
+      "The paper describes two main types of attention:\n",
+      "1.  **Scaled Dot-Product Attention:** This specific attention mechanism computes the dot products of a query with all keys, divides each by the square root of the key dimension ($\\sqrt{d_k}$), and then applies a softmax function to obtain the weights on the values. This scaling helps to prevent large dot products from pushing the softmax function into regions with extremely small gradients, especially for large values of $d_k$.\n",
+      "2.  **Multi-Head Attention:** Instead of performing a single attention function with high-dimensional keys, values, and queries, Multi-Head Attention linearly projects the queries, keys, and values multiple times (h times) into different, lower-dimensional subspaces. An attention function is then performed in parallel on each of these projected versions. The outputs from these parallel attention heads are concatenated and then linearly projected again to produce the final result. This allows the model to jointly attend to information from different representation subspaces at different positions.\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Send Q&A Prompt to Gemini\n",
+    "response = client.models.generate_content(\n",
+    "    model=MODEL_ID,\n",
+    "    contents=[\n",
+    "        \"What is the attention mechanism?\",\n",
+    "        Part.from_uri(\n",
+    "            file_uri=\"gs://cloud-samples-data/generative-ai/pdf/1706.03762v7.pdf\",\n",
+    "            mime_type=PDF_MIME_TYPE,\n",
+    "        ),\n",
+    "    ],\n",
+    "    config=GenerateContentConfig(\n",
+    "        system_instruction=qa_system_instruction,\n",
+    "        temperature=0,\n",
+    "        response_mime_type=\"text/plain\",\n",
+    "    ),\n",
+    ")\n",
+    "\n",
+    "print(f\"Answer: {response.text}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "d5881bdeb3b0"
+   },
+   "source": [
+    "## Document Summarization\n",
+    "\n",
+    "Gemini can also be used to summarize or paraphrase a document's contents. Your prompt can specify how detailed the summary should be or specific formatting, such as bullet points or paragraphs."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+    "id": "85b23b916ffa"
+   },
+   "outputs": [],
+   "source": [
+    "summarization_system_instruction = \"\"\"You are a professional document summarization specialist. Given a document, your task is to provide a detailed summary of the content of the document.\n",
+    "\n",
+    "If it includes images, provide descriptions of the images.\n",
+    "If it includes tables, extract all elements of the tables.\n",
+    "If it includes graphs, explain the findings in the graphs.\n",
+    "Do not include any numbers that are not mentioned in the document.\n",
+    "\"\"\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {
+    "id": "01c2c8c947e0"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "### Document Summary"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "This document is a statement by FDIC Chairman Jelena McWilliams on the Notice of Proposed Rulemaking (NPRM) regarding revisions to the Community Reinvestment Act (CRA) Regulations, delivered at the FDIC Board Meeting on December 12, 2019.\n",
+       "\n",
+       "**Summary of the Statement:**\n",
+       "\n",
+       "Chairman McWilliams emphasizes the need for banking regulations to evolve with the industry to ensure an effective system that serves businesses and consumers nationwide. The proposed modernization of CRA regulations aims to promote greater investments in communities that need them most, particularly low- and moderate-income (LMI) areas.\n",
+       "\n",
+       "She notes that while discussions about statutes and regulations can often seem technical, the CRA directly impacts the lives of ordinary Americans. The beneficial impact of CRA regulations can diminish when they become out of sync with technological and business changes, especially concerning how banks offer services. The core objective of CRA, which encourages banks to meet the credit needs of their chartered communities, including LMI areas, remains critical. However, due to transformative changes in the banking industry, such as digital banking, the regulations, last significantly revised in 1995, must be updated.\n",
+       "\n",
+       "The proposed rulemaking seeks to modernize these regulations by preserving effective aspects, updating outdated components, and providing clarity to financial institutions. The ultimate goal is to increase LMI lending and benefit LMI communities across the nation.\n",
+       "\n",
+       "The proposal aims to achieve this goal in several ways:\n",
+       "*   **Encouraging long-term commitments:** Banks would be encouraged to provide greater credit for retail loans retained on-balance sheet in LMI communities.\n",
+       "*   **Increasing loan size for small businesses and farms:** The size of qualifying loans to small businesses and small farms would increase to $2 million to encourage economic development, job creation, and support for family farms.\n",
+       "*   **Providing CRA credit for Indian Country:** Retail and community development activities in Indian Country would receive CRA credit.\n",
+       "*   **Expanding qualifying activities:** Activities that qualify for CRA credit would include capital investments and loan participations undertaken by banks in cooperation with Community Development Financial Institutions (CDFIs), regardless of the CDFI's location.\n",
+       "\n",
+       "Additionally, the proposal would clarify qualifying activities by:\n",
+       "1.  Requiring the FDIC and OCC to periodically publish a list of illustrative examples of qualifying activities and establish a process for stakeholders to seek agency determination of a qualifying activity.\n",
+       "2.  Establishing new performance standards to assess:\n",
+       "    *   The distribution of qualifying retail loan originations to LMI individuals, and to small farms and small businesses in an assessment area.\n",
+       "    *   The quantified value of the bank's qualifying activities relative to its assessment area and bank-level retail deposits. These components would be compared to specific benchmarks and thresholds set before a bank's evaluation period, incentivizing CRA activity and allowing banks to plan without uncertainty.\n",
+       "\n",
+       "The proposal also recognizes the evolution of the banking system, including digital banks, by requiring banks to add assessment areas where they have significant concentrations of retail domestic deposits. This ensures that banks meet credit needs where they collect deposits, even if outside their traditional assessment areas. Existing provisions for banks to delineate assessment areas based on their main office, branches, and deposit-taking facilities, and to include surrounding geographies where they originate or purchase a substantial portion of their loans, would remain intact.\n",
+       "\n",
+       "To avoid overburdening small banks (those with $500 million or less in total assets), the proposal would allow them to choose between being evaluated under the current rules or opting into the new performance standards.\n",
+       "\n",
+       "Chairman McWilliams concludes by emphasizing the importance of robust public comment and stakeholder feedback to improve the proposal. She acknowledges the hard work, collaboration, and coordination among the FDIC, OCC, and Federal Reserve Board. While the Federal Reserve Board has not joined the proposal at this time, she appreciates their engagement and recommendations, many of which are reflected in the proposal, and looks forward to continued collaboration. She expresses her support for the proposed rule."
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# Send Summarization Prompt to Gemini\n",
+    "response = client.models.generate_content(\n",
+    "    model=MODEL_ID,\n",
+    "    contents=[\n",
+    "        \"Summarize the following document.\",\n",
+    "        Part.from_uri(\n",
+    "            file_uri=\"gs://cloud-samples-data/generative-ai/pdf/fdic_board_meeting.pdf\",\n",
+    "            mime_type=PDF_MIME_TYPE,\n",
+    "        ),\n",
+    "    ],\n",
+    "    config=GenerateContentConfig(\n",
+    "        system_instruction=summarization_system_instruction,\n",
+    "        temperature=0,\n",
+    "        response_mime_type=\"text/plain\",\n",
+    "    ),\n",
+    ")\n",
+    "\n",
+    "display(Markdown(f\"### Document Summary\"))\n",
+    "display(Markdown(response.text))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "85015f00a36f"
+   },
+   "source": [
+    "## Table parsing from documents\n",
+    "\n",
+    "Gemini can parse contents of a table and return it in a structured format, such as HTML or markdown."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {
+    "id": "b780755d42e0"
+   },
+   "outputs": [],
+   "source": [
+    "table_extraction_prompt = \"\"\"What is the HTML code of the table in this document?\"\"\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {
+    "id": "2ad318a19c6a"
+   },
+   "outputs": [
+    {
+     "ename": "ClientError",
+     "evalue": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mClientError\u001b[0m                               Traceback (most recent call last)",
+      "Cell \u001b[0;32mIn[23], line 2\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[38;5;66;03m# Send Table Extraction Prompt to Gemini\u001b[39;00m\n\u001b[0;32m----> 2\u001b[0m response \u001b[38;5;241m=\u001b[39m \u001b[43mclient\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mmodels\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mgenerate_content\u001b[49m\u001b[43m(\u001b[49m\n\u001b[1;32m      3\u001b[0m \u001b[43m    \u001b[49m\u001b[43mmodel\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mMODEL_ID\u001b[49m\u001b[43m,\u001b[49m\n\u001b[1;32m      4\u001b[0m \u001b[43m    \u001b[49m\u001b[43mcontents\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43m[\u001b[49m\n\u001b[1;32m      5\u001b[0m \u001b[43m        \u001b[49m\u001b[43mtable_extraction_prompt\u001b[49m\u001b[43m,\u001b[49m\n\u001b[1;32m      6\u001b[0m \u001b[43m        \u001b[49m\u001b[43mPart\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mfrom_uri\u001b[49m\u001b[43m(\u001b[49m\n\u001b[1;32m      7\u001b[0m \u001b[43m            \u001b[49m\u001b[43mfile_uri\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[38;5;124;43m\"\u001b[39;49m\u001b[38;5;124;43mgs://cloud-samples-data/generative-ai/pdf/salary_table.pdf\u001b[39;49m\u001b[38;5;124;43m\"\u001b[39;49m\u001b[43m,\u001b[49m\n\u001b[1;32m      8\u001b[0m \u001b[43m            \u001b[49m\u001b[43mmime_type\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mPDF_MIME_TYPE\u001b[49m\u001b[43m,\u001b[49m\n\u001b[1;32m      9\u001b[0m \u001b[43m        \u001b[49m\u001b[43m)\u001b[49m\u001b[43m,\u001b[49m\n\u001b[1;32m     10\u001b[0m \u001b[43m    \u001b[49m\u001b[43m]\u001b[49m\u001b[43m,\u001b[49m\n\u001b[1;32m     11\u001b[0m \u001b[43m    \u001b[49m\u001b[43mconfig\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mGenerateContentConfig\u001b[49m\u001b[43m(\u001b[49m\u001b[43mtemperature\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[38;5;241;43m0\u001b[39;49m\u001b[43m)\u001b[49m\u001b[43m,\u001b[49m\n\u001b[1;32m     12\u001b[0m \u001b[43m)\u001b[49m\n\u001b[1;32m     14\u001b[0m display(Markdown(response\u001b[38;5;241m.\u001b[39mtext))\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/google/genai/models.py:5203\u001b[0m, in \u001b[0;36mModels.generate_content\u001b[0;34m(self, model, contents, config)\u001b[0m\n\u001b[1;32m   5201\u001b[0m \u001b[38;5;28;01mwhile\u001b[39;00m remaining_remote_calls_afc \u001b[38;5;241m>\u001b[39m \u001b[38;5;241m0\u001b[39m:\n\u001b[1;32m   5202\u001b[0m   i \u001b[38;5;241m+\u001b[39m\u001b[38;5;241m=\u001b[39m \u001b[38;5;241m1\u001b[39m\n\u001b[0;32m-> 5203\u001b[0m   response \u001b[38;5;241m=\u001b[39m \u001b[38;5;28;43mself\u001b[39;49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43m_generate_content\u001b[49m\u001b[43m(\u001b[49m\n\u001b[1;32m   5204\u001b[0m \u001b[43m      \u001b[49m\u001b[43mmodel\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mmodel\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mcontents\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mcontents\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mconfig\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mparsed_config\u001b[49m\n\u001b[1;32m   5205\u001b[0m \u001b[43m  \u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m   5207\u001b[0m   function_map \u001b[38;5;241m=\u001b[39m _extra_utils\u001b[38;5;241m.\u001b[39mget_function_map(parsed_config)\n\u001b[1;32m   5208\u001b[0m   \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;129;01mnot\u001b[39;00m function_map:\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/google/genai/models.py:3985\u001b[0m, in \u001b[0;36mModels._generate_content\u001b[0;34m(self, model, contents, config)\u001b[0m\n\u001b[1;32m   3982\u001b[0m request_dict \u001b[38;5;241m=\u001b[39m _common\u001b[38;5;241m.\u001b[39mconvert_to_dict(request_dict)\n\u001b[1;32m   3983\u001b[0m request_dict \u001b[38;5;241m=\u001b[39m _common\u001b[38;5;241m.\u001b[39mencode_unserializable_types(request_dict)\n\u001b[0;32m-> 3985\u001b[0m response \u001b[38;5;241m=\u001b[39m \u001b[38;5;28;43mself\u001b[39;49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43m_api_client\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mrequest\u001b[49m\u001b[43m(\u001b[49m\n\u001b[1;32m   3986\u001b[0m \u001b[43m    \u001b[49m\u001b[38;5;124;43m'\u001b[39;49m\u001b[38;5;124;43mpost\u001b[39;49m\u001b[38;5;124;43m'\u001b[39;49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mpath\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mrequest_dict\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mhttp_options\u001b[49m\n\u001b[1;32m   3987\u001b[0m \u001b[43m\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m   3989\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m config \u001b[38;5;129;01mis\u001b[39;00m \u001b[38;5;129;01mnot\u001b[39;00m \u001b[38;5;28;01mNone\u001b[39;00m \u001b[38;5;129;01mand\u001b[39;00m \u001b[38;5;28mgetattr\u001b[39m(\n\u001b[1;32m   3990\u001b[0m     config, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mshould_return_http_response\u001b[39m\u001b[38;5;124m'\u001b[39m, \u001b[38;5;28;01mNone\u001b[39;00m\n\u001b[1;32m   3991\u001b[0m ):\n\u001b[1;32m   3992\u001b[0m   return_value \u001b[38;5;241m=\u001b[39m types\u001b[38;5;241m.\u001b[39mGenerateContentResponse(sdk_http_response\u001b[38;5;241m=\u001b[39mresponse)\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/google/genai/_api_client.py:1388\u001b[0m, in \u001b[0;36mBaseApiClient.request\u001b[0;34m(self, http_method, path, request_dict, http_options)\u001b[0m\n\u001b[1;32m   1378\u001b[0m \u001b[38;5;28;01mdef\u001b[39;00m\u001b[38;5;250m \u001b[39m\u001b[38;5;21mrequest\u001b[39m(\n\u001b[1;32m   1379\u001b[0m     \u001b[38;5;28mself\u001b[39m,\n\u001b[1;32m   1380\u001b[0m     http_method: \u001b[38;5;28mstr\u001b[39m,\n\u001b[0;32m   (...)\u001b[0m\n\u001b[1;32m   1383\u001b[0m     http_options: Optional[HttpOptionsOrDict] \u001b[38;5;241m=\u001b[39m \u001b[38;5;28;01mNone\u001b[39;00m,\n\u001b[1;32m   1384\u001b[0m ) \u001b[38;5;241m-\u001b[39m\u001b[38;5;241m>\u001b[39m SdkHttpResponse:\n\u001b[1;32m   1385\u001b[0m   http_request \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_build_request(\n\u001b[1;32m   1386\u001b[0m       http_method, path, request_dict, http_options\n\u001b[1;32m   1387\u001b[0m   )\n\u001b[0;32m-> 1388\u001b[0m   response \u001b[38;5;241m=\u001b[39m \u001b[38;5;28;43mself\u001b[39;49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43m_request\u001b[49m\u001b[43m(\u001b[49m\u001b[43mhttp_request\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mhttp_options\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mstream\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[38;5;28;43;01mFalse\u001b[39;49;00m\u001b[43m)\u001b[49m\n\u001b[1;32m   1389\u001b[0m   response_body \u001b[38;5;241m=\u001b[39m (\n\u001b[1;32m   1390\u001b[0m       response\u001b[38;5;241m.\u001b[39mresponse_stream[\u001b[38;5;241m0\u001b[39m] \u001b[38;5;28;01mif\u001b[39;00m response\u001b[38;5;241m.\u001b[39mresponse_stream \u001b[38;5;28;01melse\u001b[39;00m \u001b[38;5;124m'\u001b[39m\u001b[38;5;124m'\u001b[39m\n\u001b[1;32m   1391\u001b[0m   )\n\u001b[1;32m   1392\u001b[0m   \u001b[38;5;28;01mreturn\u001b[39;00m SdkHttpResponse(headers\u001b[38;5;241m=\u001b[39mresponse\u001b[38;5;241m.\u001b[39mheaders, body\u001b[38;5;241m=\u001b[39mresponse_body)\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/google/genai/_api_client.py:1224\u001b[0m, in \u001b[0;36mBaseApiClient._request\u001b[0;34m(self, http_request, http_options, stream)\u001b[0m\n\u001b[1;32m   1221\u001b[0m     retry \u001b[38;5;241m=\u001b[39m tenacity\u001b[38;5;241m.\u001b[39mRetrying(\u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mretry_kwargs)\n\u001b[1;32m   1222\u001b[0m     \u001b[38;5;28;01mreturn\u001b[39;00m retry(\u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_request_once, http_request, stream)  \u001b[38;5;66;03m# type: ignore[no-any-return]\u001b[39;00m\n\u001b[0;32m-> 1224\u001b[0m \u001b[38;5;28;01mreturn\u001b[39;00m \u001b[38;5;28;43mself\u001b[39;49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43m_retry\u001b[49m\u001b[43m(\u001b[49m\u001b[38;5;28;43mself\u001b[39;49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43m_request_once\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mhttp_request\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mstream\u001b[49m\u001b[43m)\u001b[49m\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/tenacity/__init__.py:477\u001b[0m, in \u001b[0;36mRetrying.__call__\u001b[0;34m(self, fn, *args, **kwargs)\u001b[0m\n\u001b[1;32m    475\u001b[0m retry_state \u001b[38;5;241m=\u001b[39m RetryCallState(retry_object\u001b[38;5;241m=\u001b[39m\u001b[38;5;28mself\u001b[39m, fn\u001b[38;5;241m=\u001b[39mfn, args\u001b[38;5;241m=\u001b[39margs, kwargs\u001b[38;5;241m=\u001b[39mkwargs)\n\u001b[1;32m    476\u001b[0m \u001b[38;5;28;01mwhile\u001b[39;00m \u001b[38;5;28;01mTrue\u001b[39;00m:\n\u001b[0;32m--> 477\u001b[0m     do \u001b[38;5;241m=\u001b[39m \u001b[38;5;28;43mself\u001b[39;49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43miter\u001b[49m\u001b[43m(\u001b[49m\u001b[43mretry_state\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mretry_state\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m    478\u001b[0m     \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28misinstance\u001b[39m(do, DoAttempt):\n\u001b[1;32m    479\u001b[0m         \u001b[38;5;28;01mtry\u001b[39;00m:\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/tenacity/__init__.py:378\u001b[0m, in \u001b[0;36mBaseRetrying.iter\u001b[0;34m(self, retry_state)\u001b[0m\n\u001b[1;32m    376\u001b[0m result \u001b[38;5;241m=\u001b[39m \u001b[38;5;28;01mNone\u001b[39;00m\n\u001b[1;32m    377\u001b[0m \u001b[38;5;28;01mfor\u001b[39;00m action \u001b[38;5;129;01min\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39miter_state\u001b[38;5;241m.\u001b[39mactions:\n\u001b[0;32m--> 378\u001b[0m     result \u001b[38;5;241m=\u001b[39m \u001b[43maction\u001b[49m\u001b[43m(\u001b[49m\u001b[43mretry_state\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m    379\u001b[0m \u001b[38;5;28;01mreturn\u001b[39;00m result\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/tenacity/__init__.py:420\u001b[0m, in \u001b[0;36mBaseRetrying._post_stop_check_actions.<locals>.exc_check\u001b[0;34m(rs)\u001b[0m\n\u001b[1;32m    418\u001b[0m retry_exc \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mretry_error_cls(fut)\n\u001b[1;32m    419\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mreraise:\n\u001b[0;32m--> 420\u001b[0m     \u001b[38;5;28;01mraise\u001b[39;00m \u001b[43mretry_exc\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mreraise\u001b[49m\u001b[43m(\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m    421\u001b[0m \u001b[38;5;28;01mraise\u001b[39;00m retry_exc \u001b[38;5;28;01mfrom\u001b[39;00m\u001b[38;5;250m \u001b[39m\u001b[38;5;21;01mfut\u001b[39;00m\u001b[38;5;21;01m.\u001b[39;00m\u001b[38;5;21;01mexception\u001b[39;00m()\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/tenacity/__init__.py:187\u001b[0m, in \u001b[0;36mRetryError.reraise\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    185\u001b[0m \u001b[38;5;28;01mdef\u001b[39;00m\u001b[38;5;250m \u001b[39m\u001b[38;5;21mreraise\u001b[39m(\u001b[38;5;28mself\u001b[39m) \u001b[38;5;241m-\u001b[39m\u001b[38;5;241m>\u001b[39m t\u001b[38;5;241m.\u001b[39mNoReturn:\n\u001b[1;32m    186\u001b[0m     \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mlast_attempt\u001b[38;5;241m.\u001b[39mfailed:\n\u001b[0;32m--> 187\u001b[0m         \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;28;43mself\u001b[39;49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mlast_attempt\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mresult\u001b[49m\u001b[43m(\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m    188\u001b[0m     \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;28mself\u001b[39m\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/concurrent/futures/_base.py:451\u001b[0m, in \u001b[0;36mFuture.result\u001b[0;34m(self, timeout)\u001b[0m\n\u001b[1;32m    449\u001b[0m     \u001b[38;5;28;01mraise\u001b[39;00m CancelledError()\n\u001b[1;32m    450\u001b[0m \u001b[38;5;28;01melif\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_state \u001b[38;5;241m==\u001b[39m FINISHED:\n\u001b[0;32m--> 451\u001b[0m     \u001b[38;5;28;01mreturn\u001b[39;00m \u001b[38;5;28;43mself\u001b[39;49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43m__get_result\u001b[49m\u001b[43m(\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m    453\u001b[0m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_condition\u001b[38;5;241m.\u001b[39mwait(timeout)\n\u001b[1;32m    455\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_state \u001b[38;5;129;01min\u001b[39;00m [CANCELLED, CANCELLED_AND_NOTIFIED]:\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/concurrent/futures/_base.py:403\u001b[0m, in \u001b[0;36mFuture.__get_result\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    401\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_exception:\n\u001b[1;32m    402\u001b[0m     \u001b[38;5;28;01mtry\u001b[39;00m:\n\u001b[0;32m--> 403\u001b[0m         \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_exception\n\u001b[1;32m    404\u001b[0m     \u001b[38;5;28;01mfinally\u001b[39;00m:\n\u001b[1;32m    405\u001b[0m         \u001b[38;5;66;03m# Break a reference cycle with the exception in self._exception\u001b[39;00m\n\u001b[1;32m    406\u001b[0m         \u001b[38;5;28mself\u001b[39m \u001b[38;5;241m=\u001b[39m \u001b[38;5;28;01mNone\u001b[39;00m\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/tenacity/__init__.py:480\u001b[0m, in \u001b[0;36mRetrying.__call__\u001b[0;34m(self, fn, *args, **kwargs)\u001b[0m\n\u001b[1;32m    478\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28misinstance\u001b[39m(do, DoAttempt):\n\u001b[1;32m    479\u001b[0m     \u001b[38;5;28;01mtry\u001b[39;00m:\n\u001b[0;32m--> 480\u001b[0m         result \u001b[38;5;241m=\u001b[39m \u001b[43mfn\u001b[49m\u001b[43m(\u001b[49m\u001b[38;5;241;43m*\u001b[39;49m\u001b[43margs\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[38;5;241;43m*\u001b[39;49m\u001b[38;5;241;43m*\u001b[39;49m\u001b[43mkwargs\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m    481\u001b[0m     \u001b[38;5;28;01mexcept\u001b[39;00m \u001b[38;5;167;01mBaseException\u001b[39;00m:  \u001b[38;5;66;03m# noqa: B902\u001b[39;00m\n\u001b[1;32m    482\u001b[0m         retry_state\u001b[38;5;241m.\u001b[39mset_exception(sys\u001b[38;5;241m.\u001b[39mexc_info())  \u001b[38;5;66;03m# type: ignore[arg-type]\u001b[39;00m\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/google/genai/_api_client.py:1201\u001b[0m, in \u001b[0;36mBaseApiClient._request_once\u001b[0;34m(self, http_request, stream)\u001b[0m\n\u001b[1;32m   1193\u001b[0m \u001b[38;5;28;01melse\u001b[39;00m:\n\u001b[1;32m   1194\u001b[0m   response \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_httpx_client\u001b[38;5;241m.\u001b[39mrequest(\n\u001b[1;32m   1195\u001b[0m       method\u001b[38;5;241m=\u001b[39mhttp_request\u001b[38;5;241m.\u001b[39mmethod,\n\u001b[1;32m   1196\u001b[0m       url\u001b[38;5;241m=\u001b[39mhttp_request\u001b[38;5;241m.\u001b[39murl,\n\u001b[0;32m   (...)\u001b[0m\n\u001b[1;32m   1199\u001b[0m       timeout\u001b[38;5;241m=\u001b[39mhttp_request\u001b[38;5;241m.\u001b[39mtimeout,\n\u001b[1;32m   1200\u001b[0m   )\n\u001b[0;32m-> 1201\u001b[0m   \u001b[43merrors\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mAPIError\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mraise_for_response\u001b[49m\u001b[43m(\u001b[49m\u001b[43mresponse\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m   1202\u001b[0m   \u001b[38;5;28;01mreturn\u001b[39;00m HttpResponse(\n\u001b[1;32m   1203\u001b[0m       response\u001b[38;5;241m.\u001b[39mheaders, response \u001b[38;5;28;01mif\u001b[39;00m stream \u001b[38;5;28;01melse\u001b[39;00m [response\u001b[38;5;241m.\u001b[39mtext]\n\u001b[1;32m   1204\u001b[0m   )\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/google/genai/errors.py:121\u001b[0m, in \u001b[0;36mAPIError.raise_for_response\u001b[0;34m(cls, response)\u001b[0m\n\u001b[1;32m    118\u001b[0m \u001b[38;5;28;01melse\u001b[39;00m:\n\u001b[1;32m    119\u001b[0m   response_json \u001b[38;5;241m=\u001b[39m response\u001b[38;5;241m.\u001b[39mbody_segments[\u001b[38;5;241m0\u001b[39m]\u001b[38;5;241m.\u001b[39mget(\u001b[38;5;124m'\u001b[39m\u001b[38;5;124merror\u001b[39m\u001b[38;5;124m'\u001b[39m, {})\n\u001b[0;32m--> 121\u001b[0m \u001b[38;5;28;43mcls\u001b[39;49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mraise_error\u001b[49m\u001b[43m(\u001b[49m\u001b[43mresponse\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mstatus_code\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mresponse_json\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mresponse\u001b[49m\u001b[43m)\u001b[49m\n",
+      "File \u001b[0;32m/opt/conda/lib/python3.10/site-packages/google/genai/errors.py:146\u001b[0m, in \u001b[0;36mAPIError.raise_error\u001b[0;34m(cls, status_code, response_json, response)\u001b[0m\n\u001b[1;32m    132\u001b[0m \u001b[38;5;250m\u001b[39m\u001b[38;5;124;03m\"\"\"Raises an appropriate APIError subclass based on the status code.\u001b[39;00m\n\u001b[1;32m    133\u001b[0m \n\u001b[1;32m    134\u001b[0m \u001b[38;5;124;03mArgs:\u001b[39;00m\n\u001b[0;32m   (...)\u001b[0m\n\u001b[1;32m    143\u001b[0m \u001b[38;5;124;03m  APIError: For other error status codes.\u001b[39;00m\n\u001b[1;32m    144\u001b[0m \u001b[38;5;124;03m\"\"\"\u001b[39;00m\n\u001b[1;32m    145\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;241m400\u001b[39m \u001b[38;5;241m<\u001b[39m\u001b[38;5;241m=\u001b[39m status_code \u001b[38;5;241m<\u001b[39m \u001b[38;5;241m500\u001b[39m:\n\u001b[0;32m--> 146\u001b[0m   \u001b[38;5;28;01mraise\u001b[39;00m ClientError(status_code, response_json, response)\n\u001b[1;32m    147\u001b[0m \u001b[38;5;28;01melif\u001b[39;00m \u001b[38;5;241m500\u001b[39m \u001b[38;5;241m<\u001b[39m\u001b[38;5;241m=\u001b[39m status_code \u001b[38;5;241m<\u001b[39m \u001b[38;5;241m600\u001b[39m:\n\u001b[1;32m    148\u001b[0m   \u001b[38;5;28;01mraise\u001b[39;00m ServerError(status_code, response_json, response)\n",
+      "\u001b[0;31mClientError\u001b[0m: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}"
+     ]
+    }
+   ],
+   "source": [
+    "# Send Table Extraction Prompt to Gemini\n",
+    "response = client.models.generate_content(\n",
+    "    model=MODEL_ID,\n",
+    "    contents=[\n",
+    "        table_extraction_prompt,\n",
+    "        Part.from_uri(\n",
+    "            file_uri=\"gs://cloud-samples-data/generative-ai/pdf/salary_table.pdf\",\n",
+    "            mime_type=PDF_MIME_TYPE,\n",
+    "        ),\n",
+    "    ],\n",
+    "    config=GenerateContentConfig(temperature=0),\n",
+    ")\n",
+    "\n",
+    "display(Markdown(response.text))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "1ebe7318abf6"
+   },
+   "source": [
+    "## Document Translation\n",
+    "\n",
+    "Gemini can translate documents between languages. This example translates meeting notes from English into French and Spanish."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {
+    "id": "c03f55376e76"
+   },
+   "outputs": [],
+   "source": [
+    "translation_prompt = \"\"\"Translate the first paragraph into French and Spanish. Label each paragraph with the target language.\"\"\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {
+    "id": "0e22d1c06508"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "### Translations"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "**French**\n",
+       "Le secteur bancaire a considérablement évolué ces dernières années, et la réglementation doit évoluer avec l'industrie afin de favoriser un système efficace qui réponde aux besoins des entreprises et des consommateurs à travers le pays. En modernisant nos réglementations d'application de la loi sur le réinvestissement communautaire (CRA), nous espérons promouvoir des investissements accrus dans les communautés qui en ont le plus besoin.\n",
+       "\n",
+       "**Spanish**\n",
+       "El negocio bancario ha cambiado drásticamente en los últimos años, y las regulaciones deben evolucionar con la industria para fomentar un sistema eficaz que satisfaga las necesidades de las empresas y los consumidores en todo el país. Al modernizar nuestras regulaciones que implementan la Ley de Reinversión Comunitaria (CRA), esperamos promover mayores inversiones en las comunidades que más las necesitan."
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# Send Translation Prompt to Gemini\n",
+    "response = client.models.generate_content(\n",
+    "    model=MODEL_ID,\n",
+    "    contents=[\n",
+    "        translation_prompt,\n",
+    "        Part.from_uri(\n",
+    "            file_uri=\"gs://cloud-samples-data/generative-ai/pdf/fdic_board_meeting.pdf\",\n",
+    "            mime_type=PDF_MIME_TYPE,\n",
+    "        ),\n",
+    "    ],\n",
+    "    config=GenerateContentConfig(\n",
+    "        temperature=0,\n",
+    "    ),\n",
+    ")\n",
+    "\n",
+    "display(Markdown(f\"### Translations\"))\n",
+    "display(Markdown(response.text))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "0e8111f438db"
+   },
+   "source": [
+    "## Document Comparison\n",
+    "\n",
+    "Gemini can compare and contrast the contents of multiple documents. This example finds the changes in the IRS Form 1040 between 2013 and 2023.\n",
+    "\n",
+    "Note: when working with multiple documents, the order can matter and should be specified in your prompt."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {
+    "id": "62bd15c5553f"
+   },
+   "outputs": [],
+   "source": [
+    "comparison_prompt = \"\"\"The first document is from 2013, the second one from 2023. How did the standard deduction evolve?\"\"\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {
+    "id": "e5f07456ed8d"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/markdown": [
+       "### Comparison"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "The standard deduction has significantly increased between 2013 and 2023, and the structure of how deductions are calculated has also changed.\n",
+       "\n",
+       "Here's a breakdown of the evolution:\n",
+       "\n",
+       "**2013 Standard Deduction (from Form 1040, page 2):**\n",
+       "\n",
+       "*   **Single or Married filing separately:** $6,100\n",
+       "*   **Married filing jointly or Qualifying widow(er):** $12,200\n",
+       "*   **Head of household:** $8,950\n",
+       "*   **Note:** In 2013, taxpayers also claimed **personal exemptions**. For example, line 42 on the 2013 Form 1040 shows an exemption amount of $3,900 per person (for incomes up to $150,000). This was *in addition* to the standard deduction or itemized deductions.\n",
+       "\n",
+       "**2023 Standard Deduction (from Form 1040, page 1):**\n",
+       "\n",
+       "*   **Single or Married filing separately:** $13,850\n",
+       "*   **Married filing jointly or Qualifying surviving spouse:** $27,700\n",
+       "*   **Head of household:** $20,800\n",
+       "*   **Note:** The concept of **personal exemptions was eliminated** by the Tax Cuts and Jobs Act of 2017 (TCJA), which went into effect for the 2018 tax year. The increased standard deduction amounts were intended to largely offset the loss of personal exemptions for many taxpayers.\n",
+       "\n",
+       "**Summary of Evolution:**\n",
+       "\n",
+       "1.  **Significant Increase in Amounts:** The standard deduction amounts have roughly doubled (or more) across all filing statuses from 2013 to 2023.\n",
+       "    *   Single: $6,100 -> $13,850 (increase of $7,750)\n",
+       "    *   MFJ: $12,200 -> $27,700 (increase of $15,500)\n",
+       "    *   HOH: $8,950 -> $20,800 (increase of $11,850)\n",
+       "2.  **Elimination of Personal Exemptions:** The 2013 tax form included a deduction for personal exemptions (e.g., $3,900 per person). The 2023 form does not have this deduction. The higher standard deduction amounts in 2023 are partly a result of this change, aiming to simplify tax filing and provide a larger deduction for non-itemizers.\n",
+       "3.  **Simplified Deduction Calculation:** For many taxpayers, the significantly higher standard deduction means they no longer need to itemize deductions, simplifying their tax preparation."
+      ],
+      "text/plain": [
+       "<IPython.core.display.Markdown object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# Send Comparison Prompt to Gemini\n",
+    "response = client.models.generate_content(\n",
+    "    model=MODEL_ID,\n",
+    "    contents=[\n",
+    "        comparison_prompt,\n",
+    "        Part.from_uri(\n",
+    "            file_uri=\"gs://cloud-samples-data/generative-ai/pdf/form_1040_2013.pdf\",\n",
+    "            mime_type=PDF_MIME_TYPE,\n",
+    "        ),\n",
+    "        Part.from_uri(\n",
+    "            file_uri=\"gs://cloud-samples-data/generative-ai/pdf/form_1040_2023.pdf\",\n",
+    "            mime_type=PDF_MIME_TYPE,\n",
+    "        ),\n",
+    "    ],\n",
+    "    config=GenerateContentConfig(temperature=0),\n",
+    ")\n",
+    "\n",
+    "display(Markdown(f\"### Comparison\"))\n",
+    "display(Markdown(response.text))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "1f99e3fb7a97"
+   },
+   "source": [
+    "## Document page extraction\n",
+    "\n",
+    "This example uses Gemini to identify relevant pages and creates a new, focused PDF."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {
+    "id": "ee236963ec3d"
+   },
+   "outputs": [],
+   "source": [
+    "PROMPT_PAGES = \"\"\"\n",
+    "Return the numbers of all pages in the document above that contain information related to the question below.\n",
+    "<Instructions>\n",
+    " - Use the document above as your only source of information to determine which pages are related to the question below.\n",
+    " - Return the page numbers of the document above that are related to the question. When in doubt, return the page anyway.\n",
+    " - The page numbers should be in the format of a list of integers, e.g. [1, 2, 3].\n",
+    "</Instructions>\n",
+    "<Suggestions>\n",
+    " - The document above is a financial report with various tables, charts, infographics, lists, and additional text information.\n",
+    " - Pay close attention to the chart legends and chart colors to determine the pages. Colors may indicate which information is important for determining the pages.\n",
+    " - The color of the chart legends represents the color of the bars in the chart.\n",
+    " - Use ONLY this document as context to determine the pages.\n",
+    " - In most cases, the page number can be found in the footer.\n",
+    "</Suggestions>\n",
+    "<Question>\n",
+    "{question}\n",
+    "</Question>\n",
+    "\"\"\"\n",
+    "\n",
+    "\n",
+    "def pdf_slice(input_file: str, output_file: str, pages: list[int]) -> None:\n",
+    "    \"\"\"Using an input pdf file name and a list of page numbers,\n",
+    "    writes a new pdf file containing only those pages.\n",
+    "    \"\"\"\n",
+    "    pdf_reader = pypdf.PdfReader(input_file)\n",
+    "    pdf_writer = pypdf.PdfWriter()\n",
+    "    for page_num in pages:\n",
+    "        if 1 <= page_num <= len(pdf_reader.pages):\n",
+    "            pdf_writer.add_page(pdf_reader.pages[page_num - 1])\n",
+    "    pdf_writer.write(output_file)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "5a8fad605e6a"
+   },
+   "source": [
+    "Include your question and the path to your PDF from a URL."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {
+    "id": "ffcad6183966"
+   },
+   "outputs": [],
+   "source": [
+    "question = \"From the Consolidated Balance Sheet, what was the difference between the total assets from 2022 to 2023?\"  # @param {type: \"string\"}\n",
+    "pdf_path = \"https://storage.googleapis.com/github-repo/generative-ai/gemini/use-cases/document-processing/CymbalBankFinancialStatements.pdf\"  # @param {type: \"string\"}\n",
+    "local_pdf = os.path.basename(pdf_path)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "25ba38644e57"
+   },
+   "source": [
+    "Extract the relevant pages using Gemini and print them."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {
+    "id": "31408efe4118"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[9]\n"
+     ]
+    }
+   ],
+   "source": [
+    "response = client.models.generate_content(\n",
+    "    model=MODEL_ID,\n",
+    "    contents=[\n",
+    "        \"<Document>\",\n",
+    "        Part.from_uri(file_uri=pdf_path, mime_type=PDF_MIME_TYPE),\n",
+    "        \"</Document>\",\n",
+    "        PROMPT_PAGES.format(question=question),\n",
+    "    ],\n",
+    "    config=GenerateContentConfig(\n",
+    "        temperature=0,\n",
+    "        response_mime_type=JSON_MIME_TYPE,\n",
+    "        response_schema=list[int],\n",
+    "    ),\n",
+    ")\n",
+    "pages = response.parsed\n",
+    "print(pages)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "6d2a92e816d4"
+   },
+   "source": [
+    "Download the PDF file to local storage."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "33474e737de4"
+   },
+   "outputs": [],
+   "source": [
+    "!wget {pdf_path} -O {local_pdf}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "bde5fbbbbe08"
+   },
+   "source": [
+    "To ensure we find the answer to the question, we will also retrieve the page immediately after the selected page."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "c05346c2724e"
+   },
+   "outputs": [],
+   "source": [
+    "expanded_pages = set(pages).union(page + 1 for page in pages)\n",
+    "pdf_slice(input_file=local_pdf, output_file=\"sample.pdf\", pages=sorted(expanded_pages))\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "colab": {
+   "name": "document_processing.ipynb",
+   "toc_visible": true
+  },
+  "environment": {
+   "kernel": "conda-base-py",
+   "name": "workbench-notebooks.m137",
+   "type": "gcloud",
+   "uri": "us-docker.pkg.dev/deeplearning-platform-release/gcr.io/workbench-notebooks:m137"
+  },
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel) (Local) (Local)",
+   "language": "python",
+   "name": "conda-base-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.19"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
