@@ -1,4 +1,4 @@
-# Document 📜 Processing with Gemini 💠
+# 🤖 Document 📜 Processing with Gemini 💠
 
 Smart Document 📜 Processing with Gemini 💠
 
